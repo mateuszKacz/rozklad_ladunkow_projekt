@@ -5,7 +5,7 @@ public class Charge {
 
     public int charge_val;
     public int charge_sign;
-    public List<Double> coords = new ArrayList<>(){{add(0.); add(0.); add(0.);}};
+    public float[] coords = new float[] {(float)0., (float)0., (float)0.};
 
     public static void main(String[] args) {
 
@@ -15,5 +15,15 @@ public class Charge {
         charge_sign = _charge_sign;
         charge_val = _charge_val;
 
+        for (int i=0; i<coords.length; i++) {
+             coords[i] = (float) Math.random();
+        }
+    }
+
+    public void print_coords(){
+
+        System.out.println("Charge coords - " + "x: " + coords[0] + " y: " + coords[1] + " z: " + coords[2]);
+
     }
 }
+
