@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.Random;
 import com.opencsv.CSVWriter;
 
@@ -27,11 +28,14 @@ public class SimulationCore {
         double[] temp_data = new double[params.anealing_param];
         double[] energy_data = new double[params.anealing_param];
         double[] mean_pdb_data = new double[params.anealing_param];
-
+        double[][] positions = new double[params.anealing_param * total_charge.number_of_charges][3];
 
         for (int an = 0; an<params.anealing_param; an++) {
-            /* Simulated anealing */
+            /* Simulated annealing */
+            // Write momentum positions to table
+            get_momentum_positions(total_charge, positions);
 
+            // Main loop
             for (int s = 0; s < iterations; s++) {
                 random_index = new Random().nextInt(total_charge.number_of_charges);
                 total_charge.position_change(random_index);
@@ -104,6 +108,48 @@ public class SimulationCore {
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void write_positions(double[][] positions, String filePath){
+        /* Method writes positions to file for analysis. */
+        File file = new File(filePath);
+
+        try {
+            // create FileWriter object with file as parameter
+            FileWriter outputfile = new FileWriter(file);
+
+            // create CSVWriter object filewriter object as parameter
+            CSVWriter writer = new CSVWriter(outputfile);
+
+            // adding header to csv
+            String[] header = { "x", "y", "z"};
+            writer.writeNext(header);
+
+            // add data to csv
+            String[] data_in = new String[3];
+
+            for (int i=0; i<positions.length; i++) {
+
+                data_in[0] = Double.toString(positions[i][0]);
+                data_in[1] = Double.toString(positions[i][1]);
+                data_in[2] = Double.toString(positions[i][2]);
+
+                writer.writeNext(data_in);
+            }
+
+
+            // closing writer connection
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void get_momentum_positions(TotalCharge _total_charge, double[][] _positions) {
+        for (int i=0; i<_total_charge.number_of_charges; i++) {
+            _positions[i] = _total_charge.total_charge[i].coordinates;
         }
     }
 }
