@@ -9,7 +9,7 @@ public class Parameters {
     public int anealing_param;
     public double temp_parameter;
     public double k_const;
-    public List<String> available_shapes = new ArrayList<>(){{add("sphere"); add("cone"); add("cuboid");}};
+    public List<String> available_shapes = new ArrayList<String>(){{add("sphere"); add("cone"); add("cuboid");}};
     public double[] shape_dimensions = new double[] {1., 1., 1., 1.}; //x, y, z, r
 
     public Parameters(double _d_xyz, double _temp, double _k_const){

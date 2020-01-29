@@ -10,7 +10,8 @@ public class Charge {
     public double[] old_coordinates;
 
     public Charge(int _charge_sign, int _charge_val) {
-        /* Basic Charge class contructor. */
+        /* Basic Charge class constructor. */
+
         charge_sign = _charge_sign;
         charge_val = _charge_val;
         energy = 0;

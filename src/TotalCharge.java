@@ -1,4 +1,3 @@
-import java.util.Random;
 
 public class TotalCharge {
 
@@ -18,10 +17,6 @@ public class TotalCharge {
         }
         recalculate_all_energies();
         total_energy = calculate_total_energy();
-    }
-
-    public void plot() {
-        /* add jzy3d library for 3d plots */
     }
 
     public void print_coordinates(){

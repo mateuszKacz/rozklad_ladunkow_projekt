@@ -68,6 +68,7 @@ public class SimulationCore {
             mean_pdb = 0;
             acc_pdb_count = 0;
         }
+        // Save data to file
         write_file(temp_data, energy_data, mean_pdb_data, "data.txt");
     }
 

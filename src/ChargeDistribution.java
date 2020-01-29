@@ -13,5 +13,4 @@ public class ChargeDistribution {
         SimulationCore sim = new SimulationCore(params, total_charge);
         sim.simulation(100000); // those are iterations in a single loop
     }
-
 }
