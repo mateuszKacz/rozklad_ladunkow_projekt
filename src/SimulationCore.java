@@ -73,7 +73,9 @@ public class SimulationCore {
             acc_pdb_count = 0;
         }
         // Save data to file
-        write_file(temp_data, energy_data, mean_pdb_data, "data.txt");
+        // write_file(temp_data, energy_data, mean_pdb_data, "data.txt");
+        // Save positions data
+        write_positions(positions, "data_positions.txt");
     }
 
     private static void write_file(double[] temp, double[] energy, double[] mean_pdb,String filePath) {

@@ -86,7 +86,7 @@ public class TotalCharge {
     public double calculate_surface_energy(int _charge_number) {
         /* Method calculates energy of surface vs charge */
         /* U_s = 1/(d)
-        * d - wektor between surface and charge
+        * d - vector between surface and charge
         * d = |A * x_a + B * y_b + C * z_c - D| / SQRT(A^2 + B^2 + C^2)
         * A,B,C,D - surface dimensions, D is a radius in sphere */
         return 1/ ((Math.abs(params.shape_dimensions[0] * total_charge[_charge_number].coordinates[0] +
