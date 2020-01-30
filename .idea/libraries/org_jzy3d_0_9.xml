@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="org.jzy3d-0.9">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/org.jzy3d-0.9.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
