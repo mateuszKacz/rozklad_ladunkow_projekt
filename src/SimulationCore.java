@@ -33,7 +33,7 @@ public class SimulationCore {
         for (int an = 0; an<params.anealing_param; an++) {
             /* Simulated annealing */
             // Write momentum positions to table
-            get_momentum_positions(total_charge, positions);
+            get_momentum_positions(total_charge, positions, an);
 
             // Main loop
             for (int s = 0; s < iterations; s++) {
@@ -149,9 +149,10 @@ public class SimulationCore {
         }
     }
 
-    private static void get_momentum_positions(TotalCharge _total_charge, double[][] _positions) {
+    private static void get_momentum_positions(TotalCharge _total_charge, double[][] _positions, int iter) {
+        int j = _total_charge.number_of_charges * iter;
         for (int i=0; i<_total_charge.number_of_charges; i++) {
-            _positions[i] = _total_charge.total_charge[i].coordinates;
+            _positions[i+j] = _total_charge.total_charge[i].coordinates;
         }
     }
 }
