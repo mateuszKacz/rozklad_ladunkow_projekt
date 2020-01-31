@@ -30,6 +30,7 @@ public class Charge {
     public void change_coordinates(double _d_xyz) {
         /* Method slightly changes the position of the charge at random direction by _d_xyz amount. */
         old_coordinates = coordinates;
+
         for (int i=0; i<3; i++) {
             if (Math.random() >= 0.5) {
                 coordinates[i] += _d_xyz;
@@ -37,6 +38,10 @@ public class Charge {
                 coordinates[i] -= _d_xyz;
             }
         }
+    }
+
+    public double calculate_charge_vector() {
+        return Math.sqrt(Math.pow(coordinates[0], 2) + Math.pow(coordinates[1], 2) + Math.pow(coordinates[2], 2));
     }
 }
 

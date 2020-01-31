@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Random;
 import com.opencsv.CSVWriter;
 
@@ -44,6 +43,7 @@ public class SimulationCore {
                 if (new_energy < total_charge.total_energy) {
                     total_charge.total_energy = new_energy; // change accepted automatically
                 } else {
+                    //total_charge.revert_change(random_index);
                     acceptance_pdb = total_charge.calculate_change_probability(new_energy);
                     //Statistic
                     mean_pdb += acceptance_pdb;
@@ -75,7 +75,7 @@ public class SimulationCore {
         // Save data to file
         // write_file(temp_data, energy_data, mean_pdb_data, "data.txt");
         // Save positions data
-        write_positions(positions, "data_positions.txt");
+        write_positions(positions, "data_positions_10c_1000000i_2k.txt");
     }
 
     private static void write_file(double[] temp, double[] energy, double[] mean_pdb,String filePath) {
@@ -149,10 +149,16 @@ public class SimulationCore {
         }
     }
 
-    private static void get_momentum_positions(TotalCharge _total_charge, double[][] _positions, int iter) {
+    private void get_momentum_positions(TotalCharge _total_charge, double[][] _positions, int iter) {
+
         int j = _total_charge.number_of_charges * iter;
+
         for (int i=0; i<_total_charge.number_of_charges; i++) {
-            _positions[i+j] = _total_charge.total_charge[i].coordinates;
+
+            for (int d=0; d < 3; d++){
+                _positions[i+j][d] = _total_charge.total_charge[i].coordinates[d];
+            }
+
         }
     }
 }

@@ -89,13 +89,13 @@ public class TotalCharge {
         * d - vector between surface and charge
         * d = |A * x_a + B * y_b + C * z_c - D| / SQRT(A^2 + B^2 + C^2)
         * A,B,C,D - surface dimensions, D is a radius in sphere */
-        return 1/ ((Math.abs(params.shape_dimensions[0] * total_charge[_charge_number].coordinates[0] +
+        return 1/Math.pow(((Math.abs(params.shape_dimensions[0] * total_charge[_charge_number].coordinates[0] +
                             params.shape_dimensions[1] * total_charge[_charge_number].coordinates[1] +
                             params.shape_dimensions[2] * total_charge[_charge_number].coordinates[2] -
                             params.shape_dimensions[3]))
                     /
                     Math.sqrt(Math.pow(params.shape_dimensions[0], 2) +
                               Math.pow(params.shape_dimensions[1], 2) +
-                              Math.pow(params.shape_dimensions[2], 2)));
+                              Math.pow(params.shape_dimensions[2], 2))),4);
     }
 }
