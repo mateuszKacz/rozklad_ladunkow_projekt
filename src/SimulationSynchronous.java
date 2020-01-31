@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.util.Random;
 import com.opencsv.CSVWriter;
 
-public class SimulationCore {
+public class SimulationSynchronous {
     /* Class contains main algorithm of the simulation */
 
     private Parameters params;
     private TotalCharge total_charge;
 
-    public SimulationCore(Parameters _params, TotalCharge _total_charge){
+    public SimulationSynchronous(Parameters _params, TotalCharge _total_charge){
         params = _params;
         total_charge = _total_charge;
     }
@@ -28,22 +28,40 @@ public class SimulationCore {
         double[] energy_data = new double[params.anealing_param];
         double[] mean_pdb_data = new double[params.anealing_param];
         double[][] positions = new double[params.anealing_param * total_charge.number_of_charges][3];
-        int num_process = Runtime.getRuntime().availableProcessors();
+        // Time count
         double time_start;
         double time_stop;
 
         time_start = System.nanoTime();
+
         for (int an = 0; an<params.anealing_param; an++) {
             /* Simulated annealing */
             // Write momentum positions to table
             get_momentum_positions(total_charge, positions, an);
 
             // Main loop
-            for (int s = 0; s < num_process; s++) {
-                Thread_1 thread = new Thread_1();
-                thread.start();
+            for (int s = 0; s < iterations; s++) {
+                random_index = new Random().nextInt(total_charge.number_of_charges);
+                total_charge.position_change(random_index);
+                total_charge.recalculate_all_energies();
+                new_energy = total_charge.calculate_total_energy();
+                if (new_energy < total_charge.total_energy) {
+                    total_charge.total_energy = new_energy; // change accepted automatically
+                } else {
+                    //total_charge.revert_change(random_index);
+                    acceptance_pdb = total_charge.calculate_change_probability(new_energy);
+                    //Statistic
+                    mean_pdb += acceptance_pdb;
+                    acc_pdb_count += 1;
+                    //code
+                    if (Math.random() <= acceptance_pdb) {
+                        total_charge.total_energy = new_energy; // change accepted, because of the probability of accepting worse state
+                    } else {
+                        total_charge.revert_change(random_index);
+                    }
+                }
             }
-            //mean_pdb = mean_pdb/acc_pdb_count;
+            mean_pdb = mean_pdb/acc_pdb_count;
 
             // Data gathering
             mean_pdb_data[an] = mean_pdb;
@@ -57,46 +75,14 @@ public class SimulationCore {
             // Update parameters for next iteration
             params.temp_parameter -= 1;
             mean_pdb = 0;
-            //acc_pdb_count = 0;
+            acc_pdb_count = 0;
         }
         time_stop = System.nanoTime();
-        System.out.println(time_stop-time_start);
-
+        System.out.println((time_stop-time_start));
         // Save data to file
-        write_file(temp_data, energy_data, mean_pdb_data, "data_asynchronous.txt");
+        // write_file(temp_data, energy_data, mean_pdb_data, "data.txt");
         // Save positions data
-        write_positions(positions, "data_positions_30c_1000000i_8k.txt");
-    }
-
-    class Thread_1 extends Thread{
-
-        public int random_index;
-        public double new_energy;
-        public double acceptance_pdb;
-
-        public void run(){
-            for (int i=0; i<250000;i++) {
-                random_index = new Random().nextInt(total_charge.number_of_charges);
-                total_charge.position_change(random_index);
-                total_charge.recalculate_all_energies();
-                new_energy = total_charge.calculate_total_energy();
-                if (new_energy < total_charge.total_energy) {
-                    total_charge.total_energy = new_energy; // change accepted automatically
-                } else {
-                    //total_charge.revert_change(random_index);
-                    acceptance_pdb = total_charge.calculate_change_probability(new_energy);
-                    //Statistic
-                    //mean_pdb += acceptance_pdb;
-                    //acc_pdb_count += 1;
-                    //code
-                    if (Math.random() <= acceptance_pdb) {
-                        total_charge.total_energy = new_energy; // change accepted, because of the probability of accepting worse state
-                    } else {
-                        total_charge.revert_change(random_index);
-                    }
-                }
-            }
-        }
+        write_positions(positions, "data_positions_10c_1000000i_2k.txt");
     }
 
     private static void write_file(double[] temp, double[] energy, double[] mean_pdb,String filePath) {
